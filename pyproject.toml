@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "torch2bt"
+version = "0.1.0-alpha"
+description = "The bridge between PyTorch research and the Bittensor decentralized intelligence network."
+requires-python = ">=3.14"
+dependencies = [
+    "torch>=2.5",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+testing = [
+    "bittensor>=8.0",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+dev = [
+    "torch2bt[testing]",
+    "ruff>=0.9",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/torch2bt"]
+
+[tool.ruff]
+line-length = 90
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "D", "UP", "ANN", "B", "N", "C90",
+    "S", "ASYNC", "BLE", "COM", "C4", "T20", "PIE", "SIM",
+    "ARG", "PTH", "PERF", "RUF",
+]
+ignore = ["D100", "D104"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+show_error_codes = true
