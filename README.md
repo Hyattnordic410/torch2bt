@@ -48,11 +48,6 @@ validator = MockValidator(MySynapse, subnet_id=18, forward_fn=my_forward)
 result = validator.query({"prompt": "a red cat"})
 ```
 
-## Stack
-
-- Python 3.14+ (free-threaded)
-- uv · ruff · ZubanLS
-
 ## Roadmap
 
 - **Alpha** — `package()` for SN1 + SN18, mock validator
