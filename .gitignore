@@ -45,7 +45,7 @@ htmlcov/
 Thumbs.db
 
 # torch2bt output
-torch2bt_output/
+output/
 
 .claude
 .ruff_cache

@@ -62,6 +62,8 @@ ignore = ["D100", "D104", "COM812"]
 "tests/**" = ["S101", "D", "ANN"]
 # codegen.py has intentionally long lines inside t-string templates
 "src/torch2bt/codegen.py" = ["E501"]
+# examples use print for output and are standalone scripts
+"examples/**" = ["T201", "INP001"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
